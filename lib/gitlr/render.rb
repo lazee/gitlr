@@ -11,6 +11,14 @@ module Gitlr
             render(repos, Gitlr::RenderStrategy.new('include', [/id/, /name/, /description/, /private/ ]))
         end
 
+        def render_missing_repos(repos)
+            render(repos, Gitlr::RenderStrategy.new('include', [/id/, /name/, /description/, /private/ ]))
+        end
+
+        def render_compare_team_repos(result)
+            puts result
+        end
+
         def render_teams(teams)
             render(teams, Gitlr::RenderStrategy.new('exclude', [/(.*)url/]))
         end
@@ -44,13 +52,13 @@ module Gitlr
                     }
                     first_iteration = false
                     result << arr.join(';')
-                else
-                    row = []
-                    obj.fields.each { |field|
-                        row << obj[field] unless ignore_field?(field, strategy)
-                    }
-                    result << row.join(';')
                 end
+                row = []
+                obj.fields.each { |field|
+                    row << obj[field] unless ignore_field?(field, strategy)
+                }
+                result << row.join(';')
+
             }
             result
         end

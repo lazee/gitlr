@@ -55,6 +55,55 @@ command :query do |c|
               render.render_teams(data.teams)
           end
         end
+
+        c2.desc "Get a list of missing repositories for a team"
+        c2.command :missingrepos do |c3|
+            c3.flag :team_id,
+            :desc => 'The team id',
+            :arg_name => 'id',
+            :required => true
+            c3.action do |global_options,options,args|
+                render.render_missing_repos(data.missing_repos(options[:team_id]))
+            end
+        end
+
+        c2.desc "Compare repositories between two team"
+        c2.command :compareteams do |c3|
+            c3.flag :first_id,
+            :desc => 'The first team id',
+            :arg_name => 'id',
+            :required => true
+
+            c3.flag :second_id,
+            :desc => 'The second team id',
+            :arg_name => 'id',
+            :required => true
+
+            c3.action do |global_options,options,args|
+                render.render_compare_team_repos(data.compare_team_repos(options[:first_id], options[:second_id]))
+            end
+        end
+
+        c2.desc "Copy repos from one team to another"
+        c2.command :copyrepos do |c3|
+            c3.flag :first_id,
+            :desc => 'The first team id',
+            :arg_name => 'id',
+            :required => true
+
+            c3.flag :second_id,
+            :desc => 'The second team id',
+            :arg_name => 'id',
+            :required => true
+
+            c3.action do |global_options,options,args|
+                data.copy_repos_from_team_to_team(options[:first_id], options[:second_id])
+            end
+        end
+
+
+
+
     end
 end
 
