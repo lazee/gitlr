@@ -1,0 +1,75 @@
+#!/usr/bin/env ruby
+require 'gli'
+require 'gitlr'
+
+#
+#      _/  _/  _/        _/_/_/  _/    _/      _/
+#       _/_/_/        _/            _/_/_/_/  _/  _/  _/_/
+#    _/_/_/_/_/      _/  _/_/  _/    _/      _/  _/_/
+#     _/_/_/        _/    _/  _/    _/      _/  _/
+#  _/  _/  _/        _/_/_/  _/      _/_/  _/  _/
+#
+
+include GLI::App
+
+# Load configuration
+Gitlr.configuration.load
+
+program_desc 'Command-Line Tool for managing your organization on GitHub'
+version Gitlr::VERSION
+subcommand_option_handling :normal
+arguments :strict
+
+data = nil
+render = nil
+
+flag :format, :arg_name => 'csv|pretty', :desc => 'Output format', :default_value => :csv, :must_match => { "csv"  => :csv, "pretty" => :pretty}
+
+switch :debug,
+:desc => "Prints debug information in addition to requested outputs",
+:default_value => false
+
+desc 'Query data from the GitHub API'
+command :query do |c|
+
+    c.desc "Query data about your organization"
+    c.command :org do |c2|
+
+        c2.desc "Get a list of all repositories in your organization"
+        c2.command :repos do |c3|
+          c3.action do |global_options,options,args|
+            render.render_repos(data.repos)
+          end
+        end
+
+        c2.desc "Get a list of all members of your organization"
+        c2.command :members do |c3|
+          c3.action do |global_options,options,args|
+              render.render_members(data.members)
+          end
+        end
+
+        c2.desc "Get a list of all teams in your organization"
+        c2.command :teams do |c3|
+          c3.action do |global_options,options,args|
+              render.render_teams(data.teams)
+          end
+        end
+    end
+end
+
+pre do |global,command,options,args|
+    Gitlr.configuration.debug = global[:debug]
+    data = Gitlr::Data.new
+    render = Gitlr::Render.new(global[:format]);
+    true
+end
+
+post do |global,command,options,args|
+end
+
+on_error do |exception|
+    true
+end
+
+exit run(ARGV)

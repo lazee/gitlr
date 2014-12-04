@@ -1,0 +1,5 @@
+= gitlr
+
+Generate this with
+    gitlr rdoc
+After you have described your command line interface
