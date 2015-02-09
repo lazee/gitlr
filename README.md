@@ -5,7 +5,9 @@ A Command Line Interface for managing and analyzing GitHub repositories within a
 
 Install
 -------
+```
 bundle install 
+```
 
 Config
 ------
@@ -26,7 +28,9 @@ machine api.github.com
 
 Run
 ---
+```
 bundle exec bin/gitlr
+```
 
 Useful resources
 ----------------
