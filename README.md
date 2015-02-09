@@ -12,7 +12,7 @@ Config
 You need to configure your rganization at Github in the file ~/.config/gitlr/config.yaml
 
 ```
-organization: amedia
+organization: <ORGANIZATION>
 ```
 
 And you also need to setup GitHub login in your ~/.netrc file:
