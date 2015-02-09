@@ -7,6 +7,23 @@ Install
 -------
 bundle install 
 
+Config
+------
+You need to configure your rganization at Github in the file ~/.config/gitlr/config.yaml
+
+```
+organization: amedia
+```
+
+And you also need to setup GitHub login in your ~/.netrc file:
+
+```
+machine api.github.com
+  login defunkt
+  password <YOUR PERSONAL ACCESS TOKEN CREATED ON GITHUB.COM>
+```
+
+
 Run
 ---
 bundle exec bin/gitlr
