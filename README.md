@@ -1,7 +1,7 @@
 gitlr
 =====
 
-A Command Line Interface for managing user access to repositories on GitHub
+A Command Line Interface for managing and analyzing GitHub repositories within an organization.
 
 Useful resources
 ----------------

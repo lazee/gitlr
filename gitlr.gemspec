@@ -7,7 +7,7 @@ spec = Gem::Specification.new do |s|
   s.email = 'jakobvadnielsen@gmail.com'
   s.homepage = 'http://www.jakobnielsen.net'
   s.platform = Gem::Platform::RUBY
-  s.summary = 'Command-Line Tool for managing your organization on GitHub'
+  s.summary = 'A Command Line Interface for managing and analyzing GitHub repositories within an organization.'
   s.files = `git ls-files`.split("
 ")
   s.require_paths << 'lib'

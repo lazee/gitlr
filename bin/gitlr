@@ -15,7 +15,7 @@ include GLI::App
 # Load configuration
 Gitlr.configuration.load
 
-program_desc 'Command-Line Tool for managing your organization on GitHub'
+program_desc 'A Command Line Interface for managing and analyzing GitHub repositories within an organization.'
 version Gitlr::VERSION
 subcommand_option_handling :normal
 arguments :strict
