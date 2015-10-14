@@ -23,7 +23,7 @@ arguments :strict
 data = nil
 render = nil
 
-flag :format, :arg_name => 'csv|pretty', :desc => 'Output format', :default_value => :csv, :must_match => {"csv" => :csv, "pretty" => :pretty}
+flag :format, :arg_name => 'csv|pretty', :desc => 'Output format', :default_value => :csv, :must_match => {'csv' => :csv, 'pretty' => :pretty}
 
 switch :debug,
        :desc => "Prints debug information in addition to requested outputs",

@@ -5,7 +5,7 @@ module Gitlr
 
     def initialize
       # For debugging what going on under the hood
-      if (Gitlr.configuration.debug)
+      if Gitlr.configuration.debug
         stack = Faraday::RackBuilder.new do |builder|
           builder.response :logger
           builder.use Octokit::Response::RaiseError
@@ -22,23 +22,23 @@ module Gitlr
     # Repositories
 
     def repos
-      return handle_response(@client.organization_repositories(Gitlr.configuration.organization))
+      handle_response(@client.organization_repositories(Gitlr.configuration.organization))
     end
 
     def missing_repos(team_id)
       res = Array.new
-      repos_response = repos()
+      repos_response = repos
       team_repos_response = team_repos(team_id)
       repos_response.each { |repo|
         hit = false
         team_repos_response.each { |team_repo|
-          if (repo[:full_name] == team_repo[:full_name])
+          if repo[:full_name] == team_repo[:full_name]
             hit = true
           end
         }
         res << repo unless hit
       }
-      return res
+      res
     end
 
     # TODO Introduce controller layer where this can be done
@@ -49,17 +49,17 @@ module Gitlr
       first.each { |r1|
         hit = false
         second.each { |r2|
-          if (r1[:full_name] == r2[:full_name])
+          if r1[:full_name] == r2[:full_name]
             hit = true
           end
         }
 
-        if (!hit)
+        unless hit
           print "#{r1[:full_name]} is not in the target team. Add it? [y/N] : "
           answer = STDIN.gets.chomp
-          if (answer == 'y')
+          if answer == 'y'
             res = add_team_repo(team_id2, r1[:full_name])
-            if (res)
+            if res
               print "Added #{r1[:full_name]} to team #{team_id2}\n\n"
             else
               print "Could not #{r1[:full_name]} to team #{team_id2}\n\n"
@@ -72,7 +72,7 @@ module Gitlr
     end
 
     def compare_team_repos(team_id, team_id2)
-      res = ""
+      res = ''
       count = 0
       first = team_repos(team_id)
       second = team_repos(team_id2)
@@ -80,7 +80,7 @@ module Gitlr
       first.each { |r1|
         hit = false
         second.each { |r2|
-          if (r1[:full_name] == r2[:full_name])
+          if r1[:full_name] == r2[:full_name]
             hit = true
           end
         }
@@ -92,7 +92,7 @@ module Gitlr
       second.each { |r1|
         hit = false
         first.each { |r2|
-          if (r1[:full_name] == r2[:full_name])
+          if r1[:full_name] == r2[:full_name]
             hit = true
           end
         }
@@ -100,33 +100,33 @@ module Gitlr
         res = res + "#{r1[:full_name]} (#{r1[:id]}) is missing from first team\n" unless hit
       }
 
-      if (count == 0)
-        res = res + "The two teams has access to the same repositories!"
+      if count == 0
+        res = res + 'The two teams has access to the same repositories!'
       else
         res = res + "#{count} differenctes betweeen the two teams."
       end
-      return res
+      res
     end
 
     # Teams
 
 
     def teams
-      return handle_response(@client.organization_teams(Gitlr.configuration.organization))
+      handle_response(@client.organization_teams(Gitlr.configuration.organization))
     end
 
     def team_repos(team_id)
-      return handle_response(@client.team_repositories(team_id))
+      handle_response(@client.team_repositories(team_id))
     end
 
     def add_team_repo(team_id, repo)
-      return @client.add_team_repository(team_id, repo)
+      @client.add_team_repository(team_id, repo)
     end
 
     # Members
 
     def members
-      return handle_response(@client.organization_members(Gitlr.configuration.organization))
+      handle_response(@client.organization_members(Gitlr.configuration.organization))
     end
 
 
@@ -138,7 +138,7 @@ module Gitlr
       #         print_obj e
       #     }
       # end
-      return response
+      response
     end
 
     # def print_obj(obj)

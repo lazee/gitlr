@@ -33,7 +33,7 @@ module Gitlr
 
     def render(response, strategy)
       result = render_csv(response, strategy)
-      if (@format.to_s == 'csv')
+      if @format.to_s == 'csv'
         puts result
       else
         puts render_pretty(result)
@@ -45,7 +45,7 @@ module Gitlr
       result = Array.new
       first_iteration = true
       response.each { |obj|
-        if (first_iteration)
+        if first_iteration
           arr = Array.new
           obj.fields.each { |field|
             arr << field.to_s unless ignore_field?(field, strategy)
@@ -64,20 +64,20 @@ module Gitlr
     end
 
     def ignore_field?(field, strategy)
-      if (strategy.strategy == 'include')
+      if strategy.strategy == 'include'
         strategy.fields.each { |f|
-          if (f.match(field))
+          if f.match(field)
             return false
           end
         }
-        return true
+        true
       else
         strategy.fields.each { |f|
-          if (f.match(field))
+          if f.match(field)
             return true
           end
         }
-        return false
+        false
       end
     end
 
@@ -87,7 +87,7 @@ module Gitlr
       first_iteration = true
       csv.each { |line|
         line_arr = line.split(';')
-        if (first_iteration)
+        if first_iteration
           table = Terminal::Table.new headings: line_arr
           first_iteration = false
         else
