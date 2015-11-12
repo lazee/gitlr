@@ -131,7 +131,7 @@ module Gitlr
         line_arr = line.split(';')
         if first_iteration && Gitlr.configuration.show_header
           first_iteration = false
-          header << line_arr
+          header = line_arr
         else
           rows << line_arr
         end
