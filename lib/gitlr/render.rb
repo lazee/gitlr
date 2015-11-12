@@ -128,7 +128,6 @@ module Gitlr
       header = []
       first_iteration = true
       csv.each { |line|
-        puts line
         line_arr = line.split(';')
         if first_iteration && Gitlr.configuration.show_header
           first_iteration = false
