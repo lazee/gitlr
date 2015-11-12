@@ -30,14 +30,18 @@ module Gitlr
           arr = Array.new
           repo_languages(obj.id).fields.each { |field|
             arr << field.to_s
-            do_include = filter_match?(language_filter, field)
+            unless do_include
+              do_include = filter_match?(language_filter, field.to_s)
+            end
           }
           obj.language = arr.join(',')
         else
           do_include = filter_match?(language_filter, obj.language)
         end
 
-        final_response << obj if do_include
+        if do_include
+          final_response << obj
+        end
       }
 
       handle_response(final_response)
@@ -49,7 +53,7 @@ module Gitlr
       elsif value.nil?
         false
       else
-        value.downcase == language_filter
+        value.downcase == language_filter.downcase
       end
     end
 
