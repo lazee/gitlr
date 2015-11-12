@@ -32,6 +32,15 @@ Run
 bundle exec bin/gitlr
 ```
 
+Examples
+--------
+
+Get all projects within your organization that has Java as its main language
+```
+bundle exec bin/gitlr --format=id query org repos --language_filter java
+```
+
+
 Useful resources
 ----------------
  * http://www.rubydoc.info/github/pengwynn/octokit/
