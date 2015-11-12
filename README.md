@@ -13,7 +13,7 @@ bundle install
 
 Config
 ------
-You need to configure your rganization at Github in the file ~/.config/gitlr/config.yaml
+You need to configure your organization at Github in the file ~/.config/gitlr/config.yaml
 
 ```
 organization: <ORGANIZATION>
