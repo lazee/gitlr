@@ -52,6 +52,11 @@ CSV print all teams within your organization without CSV-header
 bundle exec bin/gitlr --no-header --format=pretty query org teams
 ```
 
+Git clone all the Java repositories within your organization:
+```
+for a in `gitlr --format id query org repos --include_all_languages --language_filter java`; do git clone git@github.com:$a.git; done
+```
+
 Run gitlr for a full overview of all the available features...
 
 
