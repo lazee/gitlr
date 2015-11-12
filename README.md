@@ -3,6 +3,8 @@ gitlr
 
 A Command Line Interface for managing and analyzing GitHub repositories within an organization.
 
+This is work in progress : Features will be added upon request or when needed by me.
+
 Install
 -------
 ```
@@ -11,7 +13,7 @@ bundle install
 
 Config
 ------
-You need to configure your rganization at Github in the file ~/.config/gitlr/config.yaml
+You need to configure your organization at Github in the file ~/.config/gitlr/config.yaml
 
 ```
 organization: <ORGANIZATION>
