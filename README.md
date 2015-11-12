@@ -35,10 +35,23 @@ bundle exec bin/gitlr
 Examples
 --------
 
-Get all projects within your organization that has Java as its main language
+Print ids for all projects within your organization that has Java as its main language
 ```
 bundle exec bin/gitlr --format=id query org repos --language_filter java
 ```
+
+Pretty print all projects within your organization that has Java as its main language
+```
+bundle exec bin/gitlr --format=pretty query org repos --language_filter java
+```
+
+CSV print all teams within your organization without CSV-header
+```
+bundle exec bin/gitlr --no-header --format=pretty query org teams
+```
+
+Run gitlr for a full overview of all the available features...
+
 
 
 Useful resources
