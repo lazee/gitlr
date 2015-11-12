@@ -3,6 +3,8 @@ gitlr
 
 A Command Line Interface for managing and analyzing GitHub repositories within an organization.
 
+This is work in progress : Features will be added upon request or when needed by me.
+
 Install
 -------
 ```
