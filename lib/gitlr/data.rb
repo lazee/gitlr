@@ -16,18 +16,46 @@ module Gitlr
       @client = Octokit::Client.new(:netrc => true)
       @client.login
       @client.auto_paginate = true
-
     end
 
     # Repositories
 
-    def repos
-      handle_response(@client.organization_repositories(Gitlr.configuration.organization))
+    def repos(include_all_languages, language_filter)
+      response = @client.organization_repositories(Gitlr.configuration.organization)
+      final_response = Array.new
+
+      response.each { |obj|
+        do_include = false
+        if include_all_languages
+          arr = Array.new
+          repo_languages(obj.id).fields.each { |field|
+            arr << field.to_s
+            do_include = filter_match?(language_filter, field)
+          }
+          obj.language = arr.join(',')
+        else
+          do_include = filter_match?(language_filter, obj.language)
+        end
+
+        final_response << obj if do_include
+      }
+
+      handle_response(final_response)
+    end
+
+    def filter_match?(language_filter, value)
+      if language_filter.nil?
+        true
+      elsif value.nil?
+        false
+      else
+        value.downcase == language_filter
+      end
     end
 
     def missing_repos(team_id)
       res = Array.new
-      repos_response = repos
+      repos_response = repos(false, nil)
       team_repos_response = team_repos(team_id)
       repos_response.each { |repo|
         hit = false
@@ -110,13 +138,16 @@ module Gitlr
 
     # Teams
 
-
     def teams
       handle_response(@client.organization_teams(Gitlr.configuration.organization))
     end
 
     def team_repos(team_id)
       handle_response(@client.team_repositories(team_id))
+    end
+
+    def repo_languages(repo)
+      handle_response(@client.languages(repo))
     end
 
     def add_team_repo(team_id, repo)
@@ -132,7 +163,7 @@ module Gitlr
 
     def handle_response(response)
       # if (Gitlr.configuration.debug)
-      #     puts response
+      #     print_obj response
       # else
       #     response.each { |e|
       #         print_obj e
@@ -141,19 +172,20 @@ module Gitlr
       response
     end
 
-    # def print_obj(obj)
-    #     s = ''
-    #     obj.fields.each { |f|
-    #         s << f.to_s << ':' << obj[f].to_s << " ; "
-    #     }
-    #     s << "\n"
-    #     puts s
-    #
-    # end
-    #
-    # def dump_fields(obj)
-    #     puts obj.fields
-    # end
+
+    def print_obj(obj)
+      s = ''
+      obj.fields.each { |f|
+        s << f.to_s << ':' << obj[f].to_s << " ; "
+      }
+      s << "\n"
+      puts s
+
+    end
+
+    def dump_fields(obj)
+      puts obj.fields
+    end
 
   end
 

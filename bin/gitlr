@@ -23,41 +23,51 @@ arguments :strict
 data = nil
 render = nil
 
-flag :format, :arg_name => 'csv|pretty', :desc => 'Output format', :default_value => :csv, :must_match => {'csv' => :csv, 'pretty' => :pretty}
+flag :format, :arg_name => 'csv|pretty|id', :desc => 'Output format', :default_value => :csv, :must_match => {'csv' => :csv, 'pretty' => :pretty, 'id' => :id}
 
 switch :debug,
-       :desc => "Prints debug information in addition to requested outputs",
+       :desc => 'Prints debug information in addition to requested outputs',
        :default_value => false
+
+switch :header,
+       :desc => 'Header switch',
+       :default_value => true
 
 desc 'Query data from the GitHub API'
 command :query do |c|
 
-  c.desc "Query data about your organization"
+  c.desc 'Query data about your organization'
   c.command :org do |c2|
 
-    c2.desc "Get a list of all repositories in your organization"
+    c2.desc 'Get a list of all repositories in your organization'
     c2.command :repos do |c3|
+      c3.switch [:include_all_languages]
+      c3.flag :language_filter,
+              :desc => 'language_filter',
+              :arg_name => 'language',
+              :required => false,
+              :default_value => nil
       c3.action do |global_options, options, args|
-        render.render_repos(data.repos)
+        render.render_repos(data.repos(options[:include_all_languages], options[:language_filter]))
       end
     end
 
-    c2.desc "Get a list of all members of your organization"
+    c2.desc 'Get a list of all members of your organization'
     c2.command :members do |c3|
       c3.action do |global_options, options, args|
         render.render_members(data.members)
       end
     end
 
-    c2.desc "Get a list of all teams in your organization"
+    c2.desc 'Get a list of all teams in your organization'
     c2.command :teams do |c3|
       c3.action do |global_options, options, args|
         render.render_teams(data.teams)
       end
     end
 
-    c2.desc "Get a list of missing repositories for a team"
-    c2.command :missingrepos do |c3|
+    c2.desc 'Get a list of missing repositories for a team'
+    c2.command :missing_repos do |c3|
       c3.flag :team_id,
               :desc => 'The team id',
               :arg_name => 'id',
@@ -67,8 +77,8 @@ command :query do |c|
       end
     end
 
-    c2.desc "Compare repositories between two team"
-    c2.command :compareteams do |c3|
+    c2.desc 'Compare repositories between two team'
+    c2.command :compare_teams do |c3|
       c3.flag :first_id,
               :desc => 'The first team id',
               :arg_name => 'id',
@@ -84,8 +94,8 @@ command :query do |c|
       end
     end
 
-    c2.desc "Copy repos from one team to another"
-    c2.command :copyrepos do |c3|
+    c2.desc 'Copy repos from one team to another'
+    c2.command :copy_repos do |c3|
       c3.flag :first_id,
               :desc => 'The first team id',
               :arg_name => 'id',
@@ -100,13 +110,29 @@ command :query do |c|
         data.copy_repos_from_team_to_team(options[:first_id], options[:second_id])
       end
     end
+  end
 
+  c.desc 'Query data about a repo'
+  c.command :repo do |r1|
 
+    r1.desc 'Get list of languages used in a repo'
+    r1.command :languages do |r2|
+      r2.flag :repo_id,
+              :desc => 'The repository id',
+              :arg_name => 'id',
+              :required => true
+
+      r2.action do |global_options, options, args|
+        render.render(data.repo_languages(options[:repo_id]))
+      end
+      end
   end
 end
 
 pre do |global, command, options, args|
   Gitlr.configuration.debug = global[:debug]
+  Gitlr.configuration.show_header = global[:header]
+  Gitlr.configuration.show_header = false if global[:format].to_s == 'id'
   data = Gitlr::Data.new
   render = Gitlr::Render.new(global[:format]);
   true

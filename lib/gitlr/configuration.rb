@@ -21,11 +21,12 @@ module Gitlr
 
 
   class Configuration
-    attr_accessor :organization, :debug
+    attr_accessor :organization, :debug, :show_header
 
     def initialize
       @default_organization = nil
       @debug = false
+      @show_header = true
     end
 
     def load
